@@ -15,7 +15,7 @@ from collections import defaultdict
 
 import pandas as pd
 
-from utils.quench_data_summary import load_quench_events
+from utils.h5_load_data import load_quench_events
 
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -37,7 +37,7 @@ def counts_from_log(path):
 
 def counts_from_h5(glob_pattern):
     events = load_quench_events(glob_pattern)
-    return events.groupby("cm").size().rename("h5").sort_index()
+    return events.groupby("cm").size().rename("h5").sort_index()  # type: ignore
 
 
 def main():
