@@ -269,7 +269,7 @@ def load_csv(path):
 
 def list_cryomodules(h5_file):
     "This function is used for the events filter in the interface"
-    return sorted(k for k in h5_file.keys() if re.fullmatch(r"CM\d+", k))
+    return sorted(k for k in h5_file.keys() if re.fullmatch(r"CMH?\d+", k))
 
 
 def list_cavities(h5_file, cm):
