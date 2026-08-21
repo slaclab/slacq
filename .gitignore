@@ -11,7 +11,4 @@ __pycache__/
 # --- macOS Specific Ignores ---
 .DS_Store
 
-quench_data_L1.h5
-
 *.h5
-combind_h5_L1.h5

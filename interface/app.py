@@ -193,7 +193,7 @@ def render_plot(signal_data, event_path):
 
     st.plotly_chart(
         fig,
-        use_container_width=False,
+        use_container_width=True,
         key=f"main_chart_{event_path}",
     )
 
@@ -213,18 +213,19 @@ def render_suggestion(suggestion):
     else:  
         st.info("The system suggests that the given waveform is **OTHER**.")
     
-
-def render_labeling_options(current_status, event_path):
-    """
-    Show the note field, specialist checkbox and the labeling buttons.
-    Returns the clicked label or set as unlabled, the note and the status of the specialist checkbox.
-    """
-
-    SRF_note = st.text_area(
+def render_note_field (event_path):
+    "Show the note next to the plot"
+    return st.text_area(
         "Add a note (optional), If you decide to leave it blank, a generated note will be used.",
         value="",
         key=f"note_{event_path}",
     )
+
+def render_labeling_options(current_status, event_path):
+    """
+    Show the specialist checkbox and the labeling buttons.
+    Returns the clicked label or set as unlabled, the note and the status of the specialist checkbox.
+    """
 
     # A checkbox if there is a need for a specialist to check the cvaity in person 
     needs_specialist = st.checkbox(
@@ -242,7 +243,7 @@ def render_labeling_options(current_status, event_path):
             if st.button(display_text, use_container_width=True):
                 clicked_option = stored_value
 
-    return clicked_option, SRF_note, needs_specialist
+    return clicked_option, needs_specialist
 
 
 def save_label(selected_path, event_path, clicked_option, SRF_note, needs_specialist):
@@ -283,14 +284,21 @@ def main():
     signal_data, frequency, saved_q_loaded = load_event_data_for_classification(selected_path, event_path)
     suggestion = compute_suggestion(signal_data, frequency, saved_q_loaded)
 
-    # ** Plot + magnifier **
-    render_plot(signal_data, event_path)
+    # ** Plot **
+    plot_col, note_col = st.columns([2,1])
+
+    with plot_col:
+        render_plot(signal_data, event_path)
+
+    with note_col:
+        SRF_note = render_note_field(event_path)
     
     # ** Labeling the waveform **
     st.subheader("Label this waveform")
     render_suggestion(suggestion)
 
-    clicked_option, SRF_note, needs_specialist =render_labeling_options(current_status, event_path)
+
+    clicked_option, needs_specialist =render_labeling_options(current_status, event_path)
 
     if clicked_option:
         save_label(
