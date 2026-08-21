@@ -10,3 +10,5 @@ __pycache__/
 
 # --- macOS Specific Ignores ---
 .DS_Store
+
+*.h5
